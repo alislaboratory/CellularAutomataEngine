@@ -116,6 +116,6 @@ function getHoveredCellY(){
 }
 
 
-function doubleClicked() {
+function mouseClicked() {
     isPressed = true;
 }

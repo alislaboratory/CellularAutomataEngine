@@ -6,7 +6,9 @@ var numColumns = 10;
 var widthBetween;
 var lengthBetween;
 
-var grid = new Array(numRows);
+var isPressed;
+
+var grid = new Array(numRows + 5);
 
 function setup(){
 
@@ -33,7 +35,7 @@ function draw(){
 
     drawHover("hover", getHoveredCellX(), getHoveredCellY());
 
-    if (mouseIsPressed){
+    if (isPressed){
         if (grid[getHoveredCellX()][getHoveredCellY()]){ // D R Y
             grid[getHoveredCellX()][getHoveredCellY()] = false;
         }
@@ -42,10 +44,11 @@ function draw(){
         }
     }
 
+    isPressed = false;
+
     
 
     
-    // Implement the rules of game of life
 
 }
 
@@ -113,3 +116,6 @@ function getHoveredCellY(){
 }
 
 
+function doubleClicked() {
+    isPressed = true;
+}

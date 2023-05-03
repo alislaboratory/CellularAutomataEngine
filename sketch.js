@@ -46,6 +46,8 @@ function draw(){
 
 
     grid = getNextGrid();
+    stroke(1);
+    text(checkNeighbors(grid, getHoveredCellX(), getHoveredCellY()), 10, 10);
 
     isPressed = false;
 
@@ -80,8 +82,8 @@ function drawGrid(){
     }
 
     fill(255);
-    for (var i = 1; i<numRows+1; i++){
-        for (var j = 1; j<numColumns+1; j++){
+    for (var i = 0; i<numRows; i++){
+        for (var j = 0; j<numColumns; j++){
             if (grid[i][j]){
             rect(i*widthBetween, j*lengthBetween, widthBetween - 5, lengthBetween - 5);
             }
@@ -126,9 +128,11 @@ function mouseClicked() {
 function getNextGrid(){
     var oldGrid = grid;
 
-    for (var i =1; i<numRows+1;i++){
-        for (var j =1; i<numColumns+1; i++){
+    for (var i =1; i<numRows-1;i++){
+        for (var j =1; i<numColumns-1; i++){
             var currNeighbors = checkNeighbors(oldGrid, i, j);
+
+            console.log(currNeighbors);
 
             if (currNeighbors > 3){
                 grid[i][j]= false;
@@ -157,6 +161,11 @@ function getNextGrid(){
         }
     }
 
+    return grid;
+
+
+    
+
 
 
 
@@ -165,13 +174,17 @@ function getNextGrid(){
 function checkNeighbors(currentGrid, x, y){
     let neighborCount = 0;
 
-	let neighbors = [ currentGrid[x - 1][y - 1], currentGrid[x][y - 1], currentGrid[x + 1][y - 1], currentGrid[x + 1][y], currentGrid[x + 1][y + 1], currentGrid[x][y + 1], currentGrid[x - 1][y + 1], currentGrid[x - 1][y] ];
+    if ((x>=1 && x<=grid.length-1) && (y>=1 && y <= grid[0].length-1)){
+        let neighbors = [ currentGrid[x - 1][y - 1], currentGrid[x][y - 1], currentGrid[x + 1][y - 1], currentGrid[x + 1][y], currentGrid[x + 1][y + 1], currentGrid[x][y + 1], currentGrid[x - 1][y + 1], currentGrid[x - 1][y] ];
 
-    for (var i = 0; i<neighbors.length; i++){
-        if (neighbors[i]){
-            neighborCount ++;
+
+        for (var i = 0; i<neighbors.length; i++){
+            if (neighbors[i]){
+                neighborCount ++;
+            }
         }
-    }
+
+}
 	
 
 	return neighborCount;

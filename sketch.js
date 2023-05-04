@@ -10,9 +10,11 @@ var isPressed;
 
 var grid = new Array(numRows + 5);
 
+var screenSize = 600;
+
 function setup(){
 
-    createCanvas(600, 600);
+    createCanvas(screenSize, screenSize);
     background(0);
 
     // Create the 2D array
@@ -33,6 +35,7 @@ function draw(){
     // Draw the grid lines
     drawGrid();
 
+    
     drawHover("hover", getHoveredCellX(), getHoveredCellY());
 
     if (isPressed){
@@ -44,10 +47,13 @@ function draw(){
         }
     }
 
-
-    grid = getNextGrid();
+    // fix checkNeighbors so it doesnt break when mouse out of grid
+    // grid = getNextGrid();
     stroke(1);
+
+    if ((getHoveredCellX() < numRows - 1) && (getHoveredCellY() < numColumns - 1)){
     text(checkNeighbors(grid, getHoveredCellX(), getHoveredCellY()), 10, 10);
+    }
 
     isPressed = false;
 
@@ -63,20 +69,20 @@ function drawGrid(){
     stroke(255);
     strokeWeight(5);
 
-    widthBetween = 600/numRows;
+    widthBetween = screenSize/numRows;
     let a = 0;
 
     for (var i = 0; i<numRows; i++){
-        line(0, a, 600, a)
+        line(0, a, screenSize, a)
 
         a += widthBetween;
     }
 
-    lengthBetween = 600/numColumns;
+    lengthBetween = screenSize/numColumns;
     a = 0;
 
     for (var i = 0; i<numColumns;i++){
-        line(a,0,a,600);
+        line(a,0,a,screenSize);
 
         a += lengthBetween;
     }
@@ -172,9 +178,15 @@ function getNextGrid(){
 }
 
 function checkNeighbors(currentGrid, x, y){
+
+    
     let neighborCount = 0;
 
+    
+
+
     if ((x>=1 && x<=grid.length-1) && (y>=1 && y <= grid[0].length-1)){
+
         let neighbors = [ currentGrid[x - 1][y - 1], currentGrid[x][y - 1], currentGrid[x + 1][y - 1], currentGrid[x + 1][y], currentGrid[x + 1][y + 1], currentGrid[x][y + 1], currentGrid[x - 1][y + 1], currentGrid[x - 1][y] ];
 
 
@@ -184,9 +196,11 @@ function checkNeighbors(currentGrid, x, y){
             }
         }
 
-}
-	
+        }
+    
 
 	return neighborCount;
 
 }
+
+

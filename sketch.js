@@ -33,9 +33,7 @@ function draw(){
 
     background(0);
     // Draw the grid lines
-    drawGrid();
-
-    
+    drawGrid(grid);
     drawHover("hover", getHoveredCellX(), getHoveredCellY());
 
     if (isPressed){
@@ -47,14 +45,16 @@ function draw(){
         }
     }
 
-    // fix checkNeighbors so it doesnt break when mouse out of grid
-    // grid = getNextGrid();
-    stroke(1);
+    if (keyIsPressed){
+        grid = getNextGrid();
 
-    if ((getHoveredCellX() < numRows - 1) && (getHoveredCellY() < numColumns - 1)){
-    text(checkNeighbors(grid, getHoveredCellX(), getHoveredCellY()), 10, 10);
     }
+    stroke(1);
+    if ((getHoveredCellX() < numRows - 1) && (getHoveredCellY() < numColumns - 1)){
+        text(checkNeighbors(grid, getHoveredCellX(), getHoveredCellY()), 10, 10);
+        }
 
+    
     isPressed = false;
 
     
@@ -65,7 +65,7 @@ function draw(){
 
 // make it object oriented later
 
-function drawGrid(){
+function drawGrid(currGrid){
     stroke(255);
     strokeWeight(5);
 
@@ -90,12 +90,15 @@ function drawGrid(){
     fill(255);
     for (var i = 0; i<numRows; i++){
         for (var j = 0; j<numColumns; j++){
-            if (grid[i][j]){
+            if (currGrid[i][j]){
             rect(i*widthBetween, j*lengthBetween, widthBetween - 5, lengthBetween - 5);
             }
         }
 
     }
+
+    
+    
 
 
 
@@ -132,34 +135,37 @@ function mouseClicked() {
 }
 
 function getNextGrid(){
-    var oldGrid = grid;
+    // need to hard copy! shallow copies wont work... (js pointer moment)
+
+    // please look away
+    let oldGrid = JSON.parse(JSON.stringify(grid));
+    // you may look back
 
     for (var i =1; i<numRows-1;i++){
         for (var j =1; i<numColumns-1; i++){
-            var currNeighbors = checkNeighbors(oldGrid, i, j);
-
-            console.log(currNeighbors);
+            var currNeighbors = checkNeighbors(grid, i, j);
+            console.log("neigh", currNeighbors);
 
             if (currNeighbors > 3){
-                grid[i][j]= false;
+                oldGrid[i][j] = false;
             }
 
             else if (currNeighbors < 2){
-                grid[i][j] = false;
+                oldGrid[i][j] = false;
             }
 
             else if (currNeighbors == 2){
-                if (grid[i][j] == true){
-                    grid[i][j] = true;
+                if (oldGrid[i][j] == true){
+                    oldGrid[i][j] = true;
                 }
                 
                 else {
-                    grid[i][j] = false;
+                    oldGrid[i][j] = false;
                 }
             }
 
             else if (currNeighbors == 3){
-                grid[i][j] = true;
+                oldGrid[i][j] = true;
             }
             
 
@@ -167,7 +173,10 @@ function getNextGrid(){
         }
     }
 
-    return grid;
+    // console.log("grid", grid);
+    // console.log("Oldgrid", oldGrid);
+    // console.log(grid == oldGrid);
+    return oldGrid;
 
 
     

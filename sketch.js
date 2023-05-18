@@ -143,7 +143,7 @@ function getNextGrid(){
 
     for (var i =1; i<numRows-1;i++){
         for (var j =1; i<numColumns-1; i++){
-            var currNeighbors = checkNeighbors(grid, i, j);
+            var currNeighbors = checkNeighbors(grid, i, j); // this break - fix break
             console.log("neigh", currNeighbors);
 
             if (currNeighbors > 3){

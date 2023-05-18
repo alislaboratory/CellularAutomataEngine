@@ -185,7 +185,7 @@ function checkNeighbors(currentGrid, x, y){
     
 
 
-    if ((x>=1 && x<=grid.length-1) && (y>=1 && y <= grid[0].length-1)){
+    if ((x>=1 && x<=currentGrid.length-1) && (y>=1 && y <= currentGrid[0].length-1)){
 
         let neighbors = [ currentGrid[x - 1][y - 1], currentGrid[x][y - 1], currentGrid[x + 1][y - 1], currentGrid[x + 1][y], currentGrid[x + 1][y + 1], currentGrid[x][y + 1], currentGrid[x - 1][y + 1], currentGrid[x - 1][y] ];
 

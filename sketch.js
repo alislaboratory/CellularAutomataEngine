@@ -1,7 +1,7 @@
 
 
-var numRows = 10;
-var numColumns = 10;
+var numRows = 30;
+var numColumns = 30;
 
 var widthBetween;
 var lengthBetween;
@@ -12,6 +12,7 @@ var grid = new Array(numRows + 5);
 
 var screenSize = 600;
 
+let startMillis;
 function setup(){
 
     createCanvas(screenSize, screenSize);
@@ -27,6 +28,8 @@ function setup(){
             grid[i][j] = false;
         }
     }
+
+    startMillis = millis();
 }
 
 function draw(){
@@ -45,9 +48,12 @@ function draw(){
         }
     }
 
-    if (keyIsPressed){
-        grid = getNextGrid();
+    let elapsedMillis = millis() - startMillis;
 
+  // After 5000 milliseconds (or 5 seconds)
+    if (keyIsPressed && elapsedMillis > 100) {
+        grid = getNextGrid();
+        startMillis = millis(); // Reset the timer
     }
     stroke(1);
     if ((getHoveredCellX() < numRows - 1) && (getHoveredCellY() < numColumns - 1)){
@@ -67,7 +73,7 @@ function draw(){
 
 function drawGrid(currGrid){
     stroke(255);
-    strokeWeight(5);
+    strokeWeight(1);
 
     widthBetween = screenSize/numRows;
     let a = 0;
@@ -136,14 +142,16 @@ function mouseClicked() {
 
 function getNextGrid(){
     // need to hard copy! shallow copies wont work... (js pointer moment)
+    
 
     // please look away
     let oldGrid = JSON.parse(JSON.stringify(grid));
     // you may look back
 
     for (var i =1; i<numRows-1;i++){
-        for (var j =1; i<numColumns-1; i++){
+        for (var j =1; j<numColumns-1; j++){
             var currNeighbors = checkNeighbors(grid, i, j); // this break - fix break
+            console.log(i, j);
             console.log("neigh", currNeighbors);
 
             if (currNeighbors > 3){

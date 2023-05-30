@@ -79,6 +79,12 @@ function getNextGrid(){
     let oldGrid = structuredClone(grid);
     // you may look back.
 
+    for (let i=0;i<oldGrid.length;i++){
+        for (let j=0;j<oldGrid[0].length;j++){
+            let tempCell = grid[i][j];
+            tempCell.value = Function(tempCell.activation.format(tempCell.field[0], tempCell.field[1], tempCell.field[2], tempCell.field[3], tempCell.field[4], tempCell.field[5], tempCell.field[6], tempCell.field[7]))();
+        }
+    }
 
 
 
@@ -93,18 +99,19 @@ class Cell {
         this.activation = "return {0} + {1} + {2} + {3} + {4} + {5} + {6} + {7}";
 
         this.fieldValues = [1, 1, 1, 1, 1, 1, 1, 1]; // field map values.
-        this.neighbors = []; // TODO get this algorithm
+        this.neighbors = checkNeighbors(grid[y][x]); // TODO get this algorithm
         this.field = []; // actual field of weighted values
+
+        this.value = 0;
         let i;
         for (i=0; i<8; i++) {
-            this.field.push(this.fieldValues[i]); // change this to multiply the field values by the neighbours.
+            this.field.push(this.fieldValues[i] * this.neighbors[i]); // change this to multiply the field values by the neighbours.
         }
         
         // this.activation = () => Function(`return ${a}+${b}`)();
     }
 
     // getValue(){ return Function(this.activation.format(this.field[0], this.field[1], this.field[2], this.field[3], this.field[4], this.field[5], this.field[6], this.field[7], this.field[8]))()}
-    getValue(){ return Function(this.activation.format(this.field[0], this.field[1], this.field[2], this.field[3], this.field[4], this.field[5], this.field[6], this.field[7]))();}
 }
 
 

@@ -17,6 +17,8 @@ let gridSizeY = 10;
 
 var grid = Array(gridSizeY);
 
+var isPressed;
+
 let screenSize = 600;
 function setup(){
     createCanvas(screenSize,screenSize);
@@ -38,15 +40,26 @@ function setup(){
 
 function draw(){
     background(0);
-    
-    drawGrid();
 
-    getNextGrid();
-    
+    if (isPressed){
+        if (grid[getHoveredCellX()][getHoveredCellY()]){ // D R Y
+            grid[getHoveredCellX()][getHoveredCellY()] = false;
+        }
+        else {
+            grid[getHoveredCellX()][getHoveredCellY()] = true;
+        }
+    }
 
+    grid = getNextGrid();
+
+    drawGrid(grid);
+
+    
+    
+    isPressed = false;
 }
 
-function drawGrid(){
+function drawGrid(currGrid){
     stroke(255);
     strokeWeight(1);
 
@@ -67,6 +80,20 @@ function drawGrid(){
 
         a += lengthBetween;
     }
+
+    fill(255);
+    for (var i = 0; i<gridSizeY; i++){
+        for (var j = 0; j<gridSizeX; j++){
+            if (currGrid[i][j]){
+            rect(i*widthBetween, j*lengthBetween, widthBetween - 5, lengthBetween - 5);
+            }
+        }
+
+    }
+}
+
+function mouseClicked(){
+    isPressed = true;
 }
 
 function getNextGrid(){
@@ -79,18 +106,28 @@ function getNextGrid(){
     let oldGrid = structuredClone(grid);
     // you may look back.
 
-    for (let i=0;i<oldGrid.length;i++){
-        for (let j=0;j<oldGrid[0].length;j++){
+    for (let i=1;i<oldGrid.length-1;i++){
+        for (let j=1;j<oldGrid[0].length-1;j++){
             let tempCell = grid[i][j];
             let neighbors = checkNeighbors(oldGrid, i, j);
-            tempCell.value = Function(tempCell.activation.format(tempCell.fieldValues[0], tempCell.fieldValues[1], tempCell.fieldValues[2], tempCell.fieldValues[3], tempCell.fieldValues[4], tempCell.fieldValues[5], tempCell.fieldValues[6], tempCell.fieldValues[7]))();
+            tempCell.value = Function(tempCell.activation.format(tempCell.fieldValues[0] * neighbors[0], tempCell.fieldValues[1] * neighbors[1], tempCell.fieldValues[2] * neighbors[2], tempCell.fieldValues[3] * neighbors[3], tempCell.fieldValues[4] * neighbors[4], tempCell.fieldValues[5] * neighbors[5], tempCell.fieldValues[6] * neighbors[6], tempCell.fieldValues[7] * neighbors[7]))();
 
         }
     }
 
+    return grid;
 
 
+}
 
+function getHoveredCellX(){
+    let widthBetween = screenSize/gridSizeX;
+    return floor(mouseX / widthBetween);
+}
+
+function getHoveredCellY(){
+    let lengthBetween = screenSize/gridSizeY;
+    return floor(mouseY / lengthBetween);
 }
 
 
@@ -111,13 +148,16 @@ class Cell {
 }
 
 
-function checkNeighbors(grid, x, y){
+function checkNeighbors(currentGrid, x, y){
 
+    let neighbors;
     if ((x>=1 && x<=currentGrid.length-1) && (y>=1 && y <= currentGrid[0].length-1)){
 
-        let neighbors = [ currentGrid[x - 1][y - 1].getValue(), currentGrid[x][y - 1].getValue(), currentGrid[x + 1][y - 1].getValue(), currentGrid[x + 1][y].getValue(), currentGrid[x + 1][y + 1].getValue(), currentGrid[x][y + 1].getValue(), currentGrid[x - 1][y + 1].getValue(), currentGrid[x - 1][y].getValue() ];
+        neighbors = [ currentGrid[x - 1][y - 1].value, currentGrid[x][y - 1].value, currentGrid[x + 1][y - 1].value, currentGrid[x + 1][y].value, currentGrid[x + 1][y + 1].value, currentGrid[x][y + 1].value, currentGrid[x - 1][y + 1].value, currentGrid[x - 1][y].value ];
 
     }
+
+    return neighbors;
 
 }
 

@@ -82,7 +82,9 @@ function getNextGrid(){
     for (let i=0;i<oldGrid.length;i++){
         for (let j=0;j<oldGrid[0].length;j++){
             let tempCell = grid[i][j];
-            tempCell.value = Function(tempCell.activation.format(tempCell.field[0], tempCell.field[1], tempCell.field[2], tempCell.field[3], tempCell.field[4], tempCell.field[5], tempCell.field[6], tempCell.field[7]))();
+            let neighbors = checkNeighbors(oldGrid, i, j);
+            tempCell.value = Function(tempCell.activation.format(tempCell.fieldValues[0], tempCell.fieldValues[1], tempCell.fieldValues[2], tempCell.fieldValues[3], tempCell.fieldValues[4], tempCell.fieldValues[5], tempCell.fieldValues[6], tempCell.fieldValues[7]))();
+
         }
     }
 
@@ -99,14 +101,8 @@ class Cell {
         this.activation = "return {0} + {1} + {2} + {3} + {4} + {5} + {6} + {7}";
 
         this.fieldValues = [1, 1, 1, 1, 1, 1, 1, 1]; // field map values.
-        this.neighbors = checkNeighbors(grid[y][x]); // TODO get this algorithm
-        this.field = []; // actual field of weighted values
 
         this.value = 0;
-        let i;
-        for (i=0; i<8; i++) {
-            this.field.push(this.fieldValues[i] * this.neighbors[i]); // change this to multiply the field values by the neighbours.
-        }
         
         // this.activation = () => Function(`return ${a}+${b}`)();
     }
@@ -124,3 +120,7 @@ function checkNeighbors(grid, x, y){
     }
 
 }
+
+
+
+// TODO - some of the translations between x,y and i,j may not be consistent. make sure to ensure that these are correct if encountering any bugs.

@@ -1,13 +1,14 @@
 
-
+let myCell;
 function setup(){
-    var myCell = new Cell(0,0);
+    myCell = new Cell(0,0);
     createCanvas(400,400);
 
 }
 
 function draw(){
-    text(10,10, myCell.activation(5,6));
+    text(myCell.activation(5,6), 100, 100);
+    
 
 }
 
@@ -16,8 +17,8 @@ class Cell {
     constructor(x, y){
         this.x = x;
         this.y = y;
-
-        this.activation = (a, b) => Function("${a}+${b}");
+        this.activation = "field[0] + field[1] + field[2] + field[3] + field[4] + field[5] + field[6] + field[7] + field[8]";
+        // this.activation = () => Function(`return ${a}+${b}`)();
     }
 }
 

@@ -79,7 +79,10 @@ function getNextGrid(){
     let oldGrid = structuredClone(grid);
     // you may look back.
 
-    
+
+
+
+
 }
 
 
@@ -104,3 +107,13 @@ class Cell {
     getValue(){ return Function(this.activation.format(this.field[0], this.field[1], this.field[2], this.field[3], this.field[4], this.field[5], this.field[6], this.field[7]))();}
 }
 
+
+function checkNeighbors(grid, x, y){
+
+    if ((x>=1 && x<=currentGrid.length-1) && (y>=1 && y <= currentGrid[0].length-1)){
+
+        let neighbors = [ currentGrid[x - 1][y - 1].getValue(), currentGrid[x][y - 1].getValue(), currentGrid[x + 1][y - 1].getValue(), currentGrid[x + 1][y].getValue(), currentGrid[x + 1][y + 1].getValue(), currentGrid[x][y + 1].getValue(), currentGrid[x - 1][y + 1].getValue(), currentGrid[x - 1][y].getValue() ];
+
+    }
+
+}

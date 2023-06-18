@@ -33,9 +33,12 @@ function setup(){
         grid[i] = new Array(gridSizeX);
     }
 
+    let count = 0;
     for (var i = 0; i<gridSizeY;i++){
         for (var j=0;j<gridSizeX;j++){
             grid[i][j] = new Cell(j, i);
+            grid[i][j].value = count;
+            count += 0.009
         }
     }
     
@@ -55,7 +58,7 @@ function draw(){
         }
     }
 
-    grid = getNextGrid();
+    // grid = getNextGrid();
 
     drawGrid(grid);
 
@@ -86,10 +89,9 @@ function drawGrid(currGrid){
         a += lengthBetween;
     }
 
-    fill(255);
     for (var i = 0; i<gridSizeY; i++){
         for (var j = 0; j<gridSizeX; j++){
-            fill(255*currGrid[i][j])
+            fill(255*currGrid[i][j].value)
             rect(i*widthBetween, j*lengthBetween, widthBetween - 5, lengthBetween - 5);
             
         }

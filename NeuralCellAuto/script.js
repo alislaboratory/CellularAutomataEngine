@@ -23,6 +23,8 @@ let screenSize = 600;
 
 let activationFunction = "function activation(x){return x;}";
 let fieldMap = [1,1,1,1,1,1,1,1,1]
+
+
 function setup(){
     createCanvas(screenSize,screenSize);
     background(0);
@@ -46,10 +48,10 @@ function draw(){
 
     if (isPressed){
         if (grid[getHoveredCellX()][getHoveredCellY()]){ // D R Y
-            grid[getHoveredCellX()][getHoveredCellY()] = false;
+            grid[getHoveredCellX()][getHoveredCellY()].value = 1;
         }
         else {
-            grid[getHoveredCellX()][getHoveredCellY()] = true;
+            grid[getHoveredCellX()][getHoveredCellY()].value = 0;
         }
     }
 
@@ -87,9 +89,9 @@ function drawGrid(currGrid){
     fill(255);
     for (var i = 0; i<gridSizeY; i++){
         for (var j = 0; j<gridSizeX; j++){
-            if (currGrid[i][j]){
+            fill(255*currGrid[i][j])
             rect(i*widthBetween, j*lengthBetween, widthBetween - 5, lengthBetween - 5);
-            }
+            
         }
 
     }
@@ -121,6 +123,14 @@ function getHoveredCellY(){
     return floor(mouseY / lengthBetween);
 }
 
+class Cell{
+    constructor(x,y){
+        this.x = x;
+        this.y = y;
+
+        this.value = 0;
+    }
+}
 
 
 

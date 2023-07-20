@@ -12,8 +12,10 @@ String.prototype.format = function() {
 
 
 
-let gridSizeX = 10;
-let gridSizeY = 10;
+let gridSizeX = 25;
+let gridSizeY = 25;
+
+let tickTime = 30;
 
 var grid = Array(gridSizeY);
 
@@ -21,8 +23,8 @@ var isPressed;
 
 let screenSize = 600;
 
-let activationFunction = "function activation(x){return x;}";
-let fieldMap = [1,1,1,1,1,1,1,1,1]
+var activationFunction = `if ({0}==3 || {0}==11 || {0}==12){return 1;} else{return 0;}`;
+var fieldMap = [1,1,1,1,1,1,1,1,9]; // loops clockwise starting from top left and last element is current cell
 
 
 function setup(){
@@ -37,10 +39,11 @@ function setup(){
     for (var i = 0; i<gridSizeY;i++){
         for (var j=0;j<gridSizeX;j++){
             grid[i][j] = new Cell(j, i);
-            grid[i][j].value = count;
-            count += 0.009
+            grid[i][j].value = 0;
         }
     }
+
+    startMillis = millis();
     
     
 
@@ -58,7 +61,11 @@ function draw(){
         }
     }
 
-    // grid = getNextGrid();
+    let elapsedMillis = millis() - startMillis;
+    if (keyIsPressed && elapsedMillis > tickTime) {
+        grid = getNextGrid();
+        startMillis = millis(); // Reset the timer
+    }
 
     drawGrid(grid);
 
@@ -113,6 +120,25 @@ function getNextGrid(){
     let oldGrid = structuredClone(grid);
     // you may look back.
 
+    for (var i =1; i<gridSizeY-1;i++){
+        for (var j =1; j<gridSizeX-1; j++){
+            var currNeighbors = checkNeighbors(grid, i, j);
+            console.log(currNeighbors);
+            let newVal = 0;
+            for (let l=0; l<currNeighbors.length; l++){
+                newVal = newVal + (currNeighbors[l]*fieldMap[l]);
+            }
+            console.log(newVal);
+            let F=new Function(activationFunction.format(newVal));
+            console.log(activationFunction.format(newVal));
+
+            oldGrid[i][j].value = F();
+            console.log(F(), oldGrid[i][j].value);
+        }
+
+    }
+    return oldGrid;
+
 }
 
 function getHoveredCellX(){
@@ -141,7 +167,7 @@ function checkNeighbors(currentGrid, x, y){
     let neighbors;
     if ((x>=1 && x<=currentGrid.length-1) && (y>=1 && y <= currentGrid[0].length-1)){
 
-        neighbors = [ currentGrid[x - 1][y - 1].value, currentGrid[x][y - 1].value, currentGrid[x + 1][y - 1].value, currentGrid[x + 1][y].value, currentGrid[x + 1][y + 1].value, currentGrid[x][y + 1].value, currentGrid[x - 1][y + 1].value, currentGrid[x - 1][y].value ];
+        neighbors = [ currentGrid[x - 1][y - 1].value, currentGrid[x][y - 1].value, currentGrid[x + 1][y - 1].value, currentGrid[x + 1][y].value, currentGrid[x + 1][y + 1].value, currentGrid[x][y + 1].value, currentGrid[x - 1][y + 1].value, currentGrid[x - 1][y].value, currentGrid[x][y].value ];
         // wraps around starting from top right going clockwise
     }
 
@@ -157,4 +183,4 @@ function checkNeighbors(currentGrid, x, y){
 // Instead, they get an x, which is the sum of all weighted neighbors as per the field map.
 // Of course, the latter would be the case since a field map where the user can access each neighbor anyway is completely useless.
 // I think that I'll just reprogram the entire thing. Additionally, field maps are global, so they do not need to be in the Cell class.
-// There will also be 9 in the neighbors including the Cell itself.
+// the cell will not be in the check neighbors but rather used and abused when the 

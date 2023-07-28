@@ -12,8 +12,8 @@ String.prototype.format = function() {
 
 
 
-let gridSizeX = 25;
-let gridSizeY = 25;
+let gridSizeX = 64;
+let gridSizeY = 64;
 
 let tickTime = 30;
 

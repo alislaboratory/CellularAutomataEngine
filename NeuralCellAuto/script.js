@@ -3,7 +3,7 @@
 String.prototype.format = function() {
     let formatted = this;
     for (let i = 0; i < arguments.length; i++) {
-      let regexp = new RegExp('\\{'+i+'\\}', 'gi');
+      let regexp = new RegExp('x', 'gi');
       formatted = formatted.replace(regexp, arguments[i]);
     }
     return formatted;
@@ -12,9 +12,8 @@ String.prototype.format = function() {
 
 
 
-let gridSizeX = 64;
-let gridSizeY = 64;
-
+let gridSizeX = 32;
+let gridSizeY = 32;
 let tickTime = 30;
 
 var grid = Array(gridSizeY);
@@ -23,12 +22,15 @@ var isPressed;
 
 let screenSize = 600;
 
-var activationFunction = `if ({0}==3 || {0}==11 || {0}==12){return 1;} else{return 0;}`;
+var activationFunction = `if (x==3 || x==11 || x==12){return 1;} else{return 0;}`;
 var fieldMap = [1,1,1,1,1,1,1,1,9]; // loops clockwise starting from top left and last element is current cell
 
+function myInputEvent() {
+  if (keyIsPressed) {activationFunction = this.value();}
+}
 
 function setup(){
-    createCanvas(screenSize,screenSize);
+    createCanvas(screenSize,screenSize).position(0,50);
     background(0);
 
     for (var i = 0; i < gridSizeY; i++){
@@ -42,7 +44,10 @@ function setup(){
             grid[i][j].value = 0;
         }
     }
-
+    var inp = createInput(`if (x==3 || x==11 || x==12){return 1;} else{return 0;}`);
+    inp.position(0, 0);
+    inp.size(500);
+    inp.input(myInputEvent);
     startMillis = millis();
     
     
@@ -51,7 +56,7 @@ function setup(){
 
 function draw(){
     background(0);
-
+    if (!(mouseX>600) && !(mouseY<50) && !(mouseY>650)){
     if (isPressed){
         if (grid[getHoveredCellX()][getHoveredCellY()]){ // D R Y
             grid[getHoveredCellX()][getHoveredCellY()].value = 1;
@@ -59,7 +64,7 @@ function draw(){
         else {
             grid[getHoveredCellX()][getHoveredCellY()].value = 0;
         }
-    }
+    }}
 
     let elapsedMillis = millis() - startMillis;
     if (keyIsPressed && elapsedMillis > tickTime) {

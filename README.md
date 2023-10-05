@@ -6,7 +6,7 @@ One of my Year 12 Software major projects. An educational application for people
 
 (in sort of priority order)
 
-- Implement object oriented cells so colour can be implemented later on.
-- Game rules.
-- UI functions.
-- Fix so that it doesnt break when mouse leaves grid.
+- Create a field map grid UI for the field map to be edited.
+- Brush up the UI and make it look nicer with some CSS
+- Add colours instead of opacity so there is a color range instead of the current opacity. For example low value is red, high value is green, etc
+
